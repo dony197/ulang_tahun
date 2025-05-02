@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Animation</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: url('waahh.png') no-repeat center center fixed;
+            background-size: cover;
+            font-family: Courier, monospace;
+            overflow: hidden;
+        }
+
+        #play-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 15px 30px;
+            font-size: 18px;
+            background-color: pink;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 1000;
+        }
+
+        .container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            display: none;
+        }
+
+        .message {
+            font-size: 50px;
+            font-weight: bold;
+            color: white;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+        }
+
+        .letter {
+            display: inline-block;
+            animation: bounce 1.8s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            30%{ transform: translateY(-10px); }
+            70%{ transform: translateY(10px); }
+        }
+
+        .letter:nth-child(odd) {
+            animation-delay: 0.1s;
+        }
+
+        .letter:nth-child(even) {
+            animation-delay: 0.3s;
+        }
+
+        .gift {
+            position: absolute;
+            width: 480px;
+            height: 480px;
+            display: none;
+        }
+
+        .gift-left {
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .gift-right {
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .cat {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            animation: floatUp 5s linear infinite;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(-800px); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <button id="play-button">Tekan</button>
+    <audio id="audio" muted>
+        <source src="song1.MP3" type="audio/mp3">
+    </audio>
+
+    <div class="container">
+        <div class="message" id="line1"></div>
+        <div class="message" id="line2"></div>
+        <div class="message" id="line3"></div>
+    </div>
+
+    <img class="gift gift-left" src="giphy.gif" alt="Gift Left">
+    <img class="gift gift-right" src="giphy.gif" alt="Gift Right">
+
+    <script>
+        document.getElementById('play-button').addEventListener('click', () => {
+            const audio = document.getElementById('audio');
+            const container = document.querySelector('.container');
+            const gifts = document.querySelectorAll('.gift');
+
+            audio.muted = false;
+            audio.play();
+            document.getElementById('play-button').style.display = 'none';
+
+            // Display container and gifts
+            container.style.display = 'block';
+            gifts.forEach(gift => gift.style.display = 'block');
+
+            // Add messages with bounce effect
+            const messages = [
+                'Happy Birthday',
+                'Shania Sulfina',
+                '✨✨✨'
+            ];
+
+            messages.forEach((message, index) => {
+                const line = document.getElementById(`line${index + 1}`);
+                message.split('').forEach((char, i) => {
+                    const span = document.createElement('span');
+                    span.classList.add('letter');
+                    span.style.animationDelay = `${i * 0.1}s`;
+                    if (char === ' ') {
+                        span.style.marginRight = '10px'; // Tambahkan spasi
+                    }
+                    span.textContent = char;
+                    line.appendChild(span);
+                });
+            });
+
+            // Create floating cats
+            function createCat() {
+                const cat = document.createElement('img');
+                cat.classList.add('cat');
+                cat.src = 'kucing.png';
+                cat.style.left = Math.random() * window.innerWidth + 'px';
+                cat.style.top = window.innerHeight + 'px';
+                cat.style.animationDuration = Math.random() * 2 + 3 + 's';
+                document.body.appendChild(cat);
+                setTimeout(() => cat.remove(), 5000);
+            }
+
+            setInterval(createCat, 300);
+        });
+    </script>
+</body>
+</html>
